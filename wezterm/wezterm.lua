@@ -2,7 +2,6 @@ local wezterm = require("wezterm")
 return {
 	window_close_confirmation = "NeverPrompt",
 	color_scheme = "Gruvbox dark, hard (base16)",
-	--	font = wezterm.font("UbuntuMono Nerd Font"),
 	font_size = 18,
 	colors = {
 		cursor_bg = "#928374",

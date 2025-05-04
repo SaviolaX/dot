@@ -1,0 +1,19 @@
+[window]
+dynamic_title = true
+dimensions = { columns =90, lines = 30 }
+padding = { x = 10, y = 10 }
+startup_mode = "Windowed"
+
+[font]
+normal = { family = "DejaVuSansMono", style = "Normal" }
+# normal = { family = "FiraCode", style = "Normal" }
+size = 18
+
+
+[colors]
+primary = { background = "#1d2021" }
+
+[keyboard]
+bindings = [
+    { key = "Enter", mods = "Alt", action = "ToggleFullscreen"},
+]
