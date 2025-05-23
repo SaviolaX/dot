@@ -8,10 +8,15 @@ return {
 		vim.g.loaded_netrw = 1
 		vim.g.loaded_netrwPlugin = 1
 
+		-- Make nvim-tree transparent to match the rest of Neovim
+		vim.api.nvim_set_hl(0, "NvimTreeNormal", { bg = "NONE" })
+		vim.api.nvim_set_hl(0, "NvimTreeNormalNC", { bg = "NONE" })
+		vim.api.nvim_set_hl(0, "NvimTreeEndOfBuffer", { bg = "NONE" })
+
 		nvimtree.setup({
 			view = {
-				width = 35,
-				relativenumber = true,
+				width = 30,
+				relativenumber = false,
 			},
 			-- change folder arrow icons
 			renderer = {
