@@ -60,7 +60,6 @@ return {
 					{ name = "buffer" }, -- Buffer words
 					{ name = "path" }, -- File paths
 				}),
-				-- Optional: Enable signature help (similar to blink.cmp)
 				experimental = {
 					ghost_text = true, -- Show inline preview of completion
 				},

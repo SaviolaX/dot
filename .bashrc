@@ -103,6 +103,7 @@ export PATH=$PATH:/usr/bin/nvim
 export PATH="$HOME/lua-language-server/bin:$PATH"
 export PATH=$PATH:"$(go env GOPATH)/bin"
 export PATH="$HOME/Scripts/:$PATH"
+export PATH=$PATH:/usr/bin/migrate
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
