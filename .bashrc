@@ -1,24 +1,60 @@
-# Only run in interactive shells
+#!/bin/bash
+# shellcheck disable=SC1090,SC1091
+
 case $- in
-*i*) ;;
+*i*) ;; # interactive
 *) return ;;
 esac
+
+# ----------------------- env variables ------------------------------
+
+export scripts="$HOME/Scripts/"
+
+# -------------------------- aliases ---------------------------------
+
+alias scripts="cd $HOME/Scripts/"
+
+# ---------------------- local utility functions ---------------------
 
 _have() { type "$1" &>/dev/null; }
 _source_if() { [[ -r "$1" ]] && source "$1"; }
 
-# --------------------------- history -------------------------------
-HISTCONTROL=ignoreboth # Ignore duplicates & commands starting with space
-HISTSIZE=5000          # Commands kept in memory
-HISTFILESIZE=10000     # Commands saved across sessions
-shopt -s histappend    # Don't overwrite history, append to it
+# gruvbox-material
+export LS_COLORS="di=38;5;245:fi=38;5;223:ln=38;5;179:ex=38;5;108:*.txt=38;5;223"
+export LESS="-FXR"
+export LESS_TERMCAP_md=$'\e[1;33m'       # start bold (yellow)
+export LESS_TERMCAP_mb=$'\e[1;35m'       # start blinking (magenta)
+export LESS_TERMCAP_me=$'\e[0m'          # end bold/blinking
+export LESS_TERMCAP_so=$'\e[38;5;108;1m' # start standout (green bold)
+export LESS_TERMCAP_se=$'\e[0m'          # end standout
+export LESS_TERMCAP_us=$'\e[4m'          # start underline
+export LESS_TERMCAP_ue=$'\e[0m'          # end underline
 
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-shopt -s checkwinsize
+# ------------------------------- pager ------------------------------
 
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+if [[ -x /usr/bin/lesspipe ]]; then
+	export LESSOPEN="| /usr/bin/lesspipe %s"
+	export LESSCLOSE="/usr/bin/lesspipe %s %s"
+fi
+
+# ----------------------------- dircolors ----------------------------
+
+if _have dircolors; then
+	if [[ -r "$HOME/.dircolors" ]]; then
+		eval "$(dircolors -b "$HOME/.dircolors")"
+	else
+		eval "$(dircolors -b)"
+	fi
+fi
+
+# ------------------------------ history -----------------------------
+
+export HISTCONTROL=ignoreboth
+export HISTSIZE=5000
+export HISTFILESIZE=10000
+
+set -o vi
+shopt -s histappend
 
 # --------------------------- smart prompt ---------------------------
 #                 (keeping in bashrc for portability)
@@ -28,100 +64,62 @@ PROMPT_MAX=95
 PROMPT_AT=@
 
 __ps1() {
-    local P='$' dir="${PWD##*/}" B countme short long double \
-        r='\[\e[31m\]' h='\[\e[34m\]' \
-        u='\[\e[33m\]' p='\[\e[34m\]' w='\[\e[35m\]' \
-        b='\[\e[36m\]' x='\[\e[0m\]' \
-        g="\[\033[38;2;90;82;76m\]"
+	local P='$' dir="${PWD##*/}" B countme short long double \
+		r='\[\e[31m\]' h='\[\e[34m\]' \
+		u='\[\e[33m\]' p='\[\e[34m\]' w='\[\e[35m\]' \
+		b='\[\e[36m\]' x='\[\e[0m\]' \
+		g="\[\033[38;2;90;82;76m\]"
 
-    [[ $EUID == 0 ]] && P='#' && u=$r && p=$u # root
-    [[ $PWD = / ]] && dir=/
-    [[ $PWD = "$HOME" ]] && dir='~'
+	[[ $EUID == 0 ]] && P='#' && u=$r && p=$u # root
+	[[ $PWD = / ]] && dir=/
+	[[ $PWD = "$HOME" ]] && dir='~'
 
-    B=$(git branch --show-current 2>/dev/null)
-    [[ $dir = "$B" ]] && B=.
-    countme="$USER$PROMPT_AT$(hostname):$dir($B)\$ "
+	B=$(git branch --show-current 2>/dev/null)
+	[[ $dir = "$B" ]] && B=.
+	countme="$USER$PROMPT_AT$(hostname):$dir($B)\$ "
 
-    [[ $B == master || $B == main ]] && b="$r"
-    [[ -n "$B" ]] && B="$g($b$B$g)"
+	[[ $B == master || $B == main ]] && b="$r"
+	[[ -n "$B" ]] && B="$g($b$B$g)"
 
-    short="$u\u$g$PROMPT_AT$h\h$g:$w$dir$B$p$P$x "
-    long="${g}╔$u\u$g$PROMPT_AT$h\h$g:$w$dir$B\n${g}╚$p$P$x "
-    double="${g}╔$u\u$g$PROMPT_AT$h\h$g:$w$dir\n${g}║$B\n${g}╚$p$P$x "
+	short="$u\u$g$PROMPT_AT$h\h$g:$w$dir$B$p$P$x "
+	long="${g}╔$u\u$g$PROMPT_AT$h\h$g:$w$dir$B\n${g}╚$p$P$x "
+	double="${g}╔$u\u$g$PROMPT_AT$h\h$g:$w$dir\n${g}║$B\n${g}╚$p$P$x "
 
-    if ((${#countme} > PROMPT_MAX)); then
-        PS1="$double"
-    elif ((${#countme} > PROMPT_LONG)); then
-        PS1="$long"
-    else
-        PS1="$short"
-    fi
+	if ((${#countme} > PROMPT_MAX)); then
+		PS1="$double"
+	elif ((${#countme} > PROMPT_LONG)); then
+		PS1="$long"
+	else
+		PS1="$short"
+	fi
+
+	if _have tmux && [[ -n "$TMUX" ]]; then
+		tmux rename-window "$(wd)"
+	fi
 }
 
 wd() {
-    dir="${PWD##*/}"
-    parent="${PWD%"/${dir}"}"
-    parent="${parent##*/}"
-    echo "$parent/$dir"
+	dir="${PWD##*/}"
+	parent="${PWD%"/${dir}"}"
+	parent="${parent##*/}"
+	echo "$parent/$dir"
 } && export wd
 
 PROMPT_COMMAND="__ps1"
 
-# ----------------------------- dircolors ----------------------------
+# ----------------------------- keyboard -----------------------------
 
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
+# only works if you have X and are using graphic Linux desktop
 
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
-
-if _have dircolors; then
-    if [[ -r "$HOME/.dircolors" ]]; then
-        eval "$(dircolors -b "$HOME/.dircolors")"
-    else
-        eval "$(dircolors -b)"
-    fi
-fi
-
-# PYENV
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-if command -v pyenv 1>/dev/null 2>&1; then
-    eval "$(pyenv init --path)"
-    eval "$(pyenv init -)"
-    eval "$(pyenv virtualenv-init -)"
-fi
-
-# Created by `pipx` on 2025-02-14 12:19:38
-export PATH="$PATH:/home/saviola/.local/bin"
-export PATH=$PATH:/usr/local/go/bin
-export PATH=$PATH:/usr/bin/nvim
-export PATH="$HOME/lua-language-server/bin:$PATH"
-export PATH=$PATH:"$(go env GOPATH)/bin"
-export PATH="$HOME/Scripts/:$PATH"
-export PATH=$PATH:/usr/bin/migrate
-
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-    if [ -f /usr/share/bash-completion/bash_completion ]; then
-        . /usr/share/bash-completion/bash_completion
-    elif [ -f /etc/bash_completion ]; then
-        . /etc/bash_completion
-    fi
-fi
+_have setxkbmap && test -n "$DISPLAY" &&
+	setxkbmap -option caps:escape &>/dev/null
 
 set-editor() {
-    export EDITOR="$1"
-    #	export VISUAL="$1"
-    #	export GH_EDITOR="$1"
-    #	export GIT_EDITOR="$1"
-    alias vi="\$EDITOR"
+	export EDITOR="$1"
+	export VISUAL="$1"
+	export GH_EDITOR="$1"
+	export GIT_EDITOR="$1"
+	alias vi="\$EDITOR"
 }
 _have "vim" && set-editor vi
 _have "nvim" && set-editor nvim
