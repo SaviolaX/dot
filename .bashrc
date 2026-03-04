@@ -14,22 +14,34 @@ export scripts="$HOME/Scripts/"
 
 alias scripts="cd $HOME/Scripts/"
 alias upd_config="${scripts}/save_config"
+alias upd_bash="source $HOME/.bashrc"
 
 # ---------------------- local utility functions ---------------------
 
 _have() { type "$1" &>/dev/null; }
 _source_if() { [[ -r "$1" ]] && source "$1"; }
 
-# gruvbox-material
-export LS_COLORS="di=38;5;245:fi=38;5;223:ln=38;5;179:ex=38;5;108:*.txt=38;5;223"
-export LESS="-FXR"
-export LESS_TERMCAP_md=$'\e[1;33m'       # start bold (yellow)
-export LESS_TERMCAP_mb=$'\e[1;35m'       # start blinking (magenta)
-export LESS_TERMCAP_me=$'\e[0m'          # end bold/blinking
-export LESS_TERMCAP_so=$'\e[38;5;108;1m' # start standout (green bold)
-export LESS_TERMCAP_se=$'\e[0m'          # end standout
-export LESS_TERMCAP_us=$'\e[4m'          # start underline
-export LESS_TERMCAP_ue=$'\e[0m'          # end underline
+
+# --- Colored Man Pages (Gruvbox Material Style) ---
+
+# Start bold (yellow)
+export LESS_TERMCAP_md=$'\e[01;33m'
+# Start blinking (magenta)
+export LESS_TERMCAP_mb=$'\e[01;35m'
+# End all mode (reset)
+export LESS_TERMCAP_me=$'\e[0m'
+# Start standout/search highlight (greenish)
+export LESS_TERMCAP_so=$'\e[01;38;5;108m'
+# End standout
+export LESS_TERMCAP_se=$'\e[0m'
+# Start underline
+export LESS_TERMCAP_us=$'\e[04;38;5;142m'
+# End underline
+export LESS_TERMCAP_ue=$'\e[0m'
+
+# Ensure less handles the colors correctly
+export MANPAGER="less -R --use-color -Dd+y -Du+b"
+export GROFF_NO_SGR=1
 
 # ------------------------------- pager ------------------------------
 
