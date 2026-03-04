@@ -13,6 +13,7 @@ export scripts="$HOME/Scripts/"
 # -------------------------- aliases ---------------------------------
 
 alias scripts="cd $HOME/Scripts/"
+alias upd_config="${scripts}/save_config"
 
 # ---------------------- local utility functions ---------------------
 
