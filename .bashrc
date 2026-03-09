@@ -9,13 +9,20 @@ esac
 # ----------------------- env variables ------------------------------
 
 export scripts="$HOME/Scripts/"
+export PATH=$HOME/.local/bin:$PATH
 
 # -------------------------- aliases ---------------------------------
 
-alias scripts="cd $HOME/Scripts/"
-alias upd_config="${scripts}/save_config"
-alias upd_bash="source $HOME/.bashrc"
+alias scripts='cd $HOME/Scripts'
+alias upd_config='$scripts/save_config'
+alias upd_bash='source $HOME/.bashrc'
 
+alias ls='ls --color=auto'
+alias la='ls -a --color=auto'
+alias ll='ls -l --color=auto'
+
+alias zed=''
+ 
 # ---------------------- local utility functions ---------------------
 
 _have() { type "$1" &>/dev/null; }
@@ -24,6 +31,7 @@ _source_if() { [[ -r "$1" ]] && source "$1"; }
 
 # --- Colored Man Pages (Gruvbox Material Style) ---
 
+export LS_COLORS="di=38;5;245:fi=38;5;223:ln=38;5;179:ex=38;5;108:*.txt=38;5;223"
 # Start bold (yellow)
 export LESS_TERMCAP_md=$'\e[01;33m'
 # Start blinking (magenta)

@@ -1,10 +1,5 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
--- vim.fn.sign_define("DiagnosticSignError", { text = "🔥", texthl = "DiagnosticError" })
--- vim.fn.sign_define("DiagnosticSignWarn", { text = "❗️", texthl = "DiagnosticWarn" })
--- vim.fn.sign_define("DiagnosticSignInfo", { text = "✨ ", texthl = "DiagnosticInfo" })
--- vim.fn.sign_define("DiagnosticSignHint", { text = "💡", texthl = "DiagnosticHint" })
-
 vim.diagnostic.config({
     signs = {
         text = {
@@ -14,6 +9,14 @@ vim.diagnostic.config({
             [vim.diagnostic.severity.HINT]  = "💡",
         },
     },
+})
+
+vim.o.updatetime = 250
+
+vim.api.nvim_create_autocmd("CursorHold", {
+    callback = function()
+        vim.diagnostic.open_float(nil, { focusable = false })
+    end
 })
 
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
