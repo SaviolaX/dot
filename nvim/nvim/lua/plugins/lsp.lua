@@ -15,8 +15,6 @@ return {
                 "lua_ls",
                 "gopls",
                 "pyright",
-                -- NOTE: mason renamed tsserver -> ts_ls in some setups.
-                -- If "ts_ls" fails for you, change it to "tsserver" in both places.
                 "ts_ls",
                 "bashls",
                 "jsonls",

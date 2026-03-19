@@ -4,6 +4,9 @@ return {
         branch = "main",
         lazy = false,
         build = ":TSUpdate",
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter-textobjects",
+        },
         config = function()
             require("nvim-treesitter").setup({
                 ensure_installed = {
@@ -14,7 +17,19 @@ return {
                     "vimdoc", "c", "java", "rust",
                 },
                 auto_install = true,
+                textobjects = {
+                    select = {
+                        enable = true,
+                        lookahead = true,
+                        keymaps = {
+                            ["af"] = "@function.outer",
+                            ["if"] = "@function.inner",
+                        },
+                    },
+                },
             })
+
+            vim.keymap.set("n", "<leader>sf", "vaf", { desc = "Select function" })
 
             vim.api.nvim_create_autocmd("FileType", {
                 callback = function()

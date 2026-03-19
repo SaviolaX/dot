@@ -10,6 +10,7 @@ esac
 
 export scripts="$HOME/Scripts/"
 export PATH=$HOME/.local/bin:$PATH
+export BAT_THEME=gruvbox-dark
 
 # -------------------------- aliases ---------------------------------
 
@@ -21,7 +22,8 @@ alias ls='ls --color=auto'
 alias la='ls -a --color=auto'
 alias ll='ls -l --color=auto'
 
-alias zed=''
+alias view='okular'
+
  
 # ---------------------- local utility functions ---------------------
 
@@ -91,6 +93,7 @@ __ps1() {
 		b='\[\e[36m\]' x='\[\e[0m\]' \
 		g="\[\033[38;2;90;82;76m\]"
 
+    
 	[[ $EUID == 0 ]] && P='#' && u=$r && p=$u # root
 	[[ $PWD = / ]] && dir=/
 	[[ $PWD = "$HOME" ]] && dir='~'

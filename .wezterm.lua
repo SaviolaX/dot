@@ -45,10 +45,10 @@ return {
     hide_tab_bar_if_only_one_tab = true,
     window_padding = {
         left = 20,
-        right = 0,
+        right = 20,
         top = 25,
-        bottom = 0,
+        bottom = 25,
     },
-    initial_cols = 110,
-    initial_rows = 30,
+    initial_cols = 130,
+    initial_rows = 35,
 }
