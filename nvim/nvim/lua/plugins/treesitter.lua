@@ -14,7 +14,7 @@ return {
                     "go", "yaml", "html", "css", "python",
                     "markdown", "markdown_inline", "bash", "lua",
                     "vim", "dockerfile", "gitignore", "query",
-                    "vimdoc", "c", "java", "rust",
+                    "vimdoc", "c", "java", "rust", "vue",
                 },
                 auto_install = true,
                 textobjects = {

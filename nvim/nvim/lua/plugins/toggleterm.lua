@@ -6,7 +6,7 @@ return {
             size = function()
                 return math.floor(vim.o.lines * 0.8)
             end,
-            open_mapping = [[<C-`>]],
+            open_mapping = [[<C-_>]],
             hide_numbers = true,
             shade_terminals = false,
             start_in_insert = true,

@@ -35,6 +35,8 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     end
 end
 
+vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 
 vim.opt.rtp:prepend(lazypath)
 

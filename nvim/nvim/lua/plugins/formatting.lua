@@ -13,7 +13,7 @@ return {
             formatters_by_ft = {
                 -- Core
                 lua = { "stylua" },
-                go = { "gofmt" },   -- or "goimports"
+                go = { "gofmt" },           -- or "goimports"
                 python = { "ruff_format" }, -- or "black" if you prefer
                 sh = { "shfmt" },
 
@@ -25,6 +25,7 @@ return {
                 html = { "prettier" },
                 css = { "prettier" },
                 scss = { "prettier" },
+                vue = { "prettier" },
 
                 -- Data formats
                 json = { "prettier" },
@@ -73,6 +74,7 @@ return {
                 sh = { "shellcheck" },
                 sql = { "sqlfluff" },
                 dockerfile = { "hadolint" },
+                vue = { "eslint_d" },
             }
 
             local grp = vim.api.nvim_create_augroup("linting", { clear = true })
